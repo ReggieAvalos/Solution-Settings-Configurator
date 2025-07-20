@@ -1,0 +1,51 @@
+# ---- NODE ----
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---- ENV FILES ----
+.env
+.env.*.local
+
+# ---- DIST/BUILD OUTPUT ----
+dist/
+build/
+out/
+
+# ---- ELECTRON SPECIFIC ----
+/release/
+/coverage/
+/*.tsbuildinfo
+/!.electron-vue/build.js
+
+# ---- OS SYSTEM FILES ----
+.DS_Store
+Thumbs.db
+
+# ---- LOGS ----
+*.log
+logs/
+
+# ---- VSCODE ----
+.vscode/
+
+# ---- CLAUDE CODE ----
+.claude/
+.claude/*
+
+# ---- CACHE ----
+.cache/
+tmp/
+temp/
+
+# ---- TESTING ----
+coverage/
+test-results/
+
+# ---- OTHERS ----
+*.swp
+*.swo
+*.bak
+*.tmp

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solution Settings Configurator - By Jose Regino Avalos Mancilla</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔧 Solution Settings Configurator</h1>
+            <p>Configure environment variables and connection references for your Dataverse solution</p>
+        </header>
+
+        <main>
+            <!-- Step 1: Choose Input Method -->
+            <section class="step" id="step1">
+                <h2>Step 1: Choose Input Method</h2>
+                
+                <!-- Mode Selection Tabs -->
+                <div class="mode-tabs">
+                    <button class="tab-button active" id="zipModeTab" data-mode="zip">
+                        📦 Generate from ZIP
+                    </button>
+                    <button class="tab-button" id="jsonModeTab" data-mode="json">
+                        📄 Load Existing JSON
+                    </button>
+                </div>
+
+                <!-- ZIP Mode Panel -->
+                <div class="mode-panel active" id="zipMode">
+                    <h3>Generate Settings from Solution ZIP</h3>
+                    <p>Select a managed solution .zip file to generate the settings JSON file.</p>
+                    <p class="note">
+                        <strong>Note:</strong> You must have the <a href="https://learn.microsoft.com/en-us/power-platform/developer/howto/install-cli-msi" target="_blank">Power Platform CLI</a> installed on your device. This option will use the CLI to generate the solution settings file. No authentication is required, but the CLI must be installed and available in the system.
+                    </p>
+                    <div class="file-selector">
+                        <input type="text" id="solutionPath" placeholder="Select a solution .zip file..." readonly>
+                        <button id="browseBtn" class="btn btn-primary">Browse ZIP</button>
+                    </div>
+                    <div class="settings-file-naming">
+                        <label for="settingsFileName">Settings File Name:</label>
+                        <input type="text" id="settingsFileName" placeholder="Enter settings file name..." required>
+                        <small>The .json extension will be added automatically</small>
+                    </div>
+                    <button id="generateBtn" class="btn btn-success" disabled>Generate Settings</button>
+                </div>
+
+                <!-- JSON Mode Panel -->
+                <div class="mode-panel" id="jsonMode">
+                    <h3>Load Existing Settings JSON</h3>
+                    <p>Select an existing settings JSON file with pre-configured values</p>
+                    <div class="file-selector">
+                        <input type="text" id="jsonPath" placeholder="Select a settings .json file..." readonly>
+                        <button id="browseJsonBtn" class="btn btn-primary">Browse JSON</button>
+                    </div>
+                    <button id="loadJsonBtn" class="btn btn-success" disabled>Load Settings</button>
+                </div>
+
+                <div id="commandOutput" class="output hidden"></div>
+            </section>
+
+            <!-- Step 2: Configure Settings -->
+            <section class="step hidden" id="step2">
+                <h2>Step 2: Configure Settings</h2>
+                
+                <!-- Settings Tabs -->
+                <div class="settings-tabs-container">
+                    <div class="settings-tabs">
+                        <div class="tabs-header">
+                            <div class="tabs-list" id="settingsTabsList">
+                                <!-- Settings tabs will be populated here -->
+                            </div>
+                            <div class="tabs-controls">
+                                <button class="btn btn-primary btn-small" id="addTabBtn">+ Add Tab</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Tab Content -->
+                        <div class="tab-content" id="settingsTabContent">
+                            <!-- Tab content will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button id="saveBtn" class="btn btn-success">Save Current Tab</button>
+                    <button id="saveAllBtn" class="btn btn-success">Save All Tabs</button>
+                    <button id="resetBtn" class="btn btn-secondary">Reset Current Tab</button>
+                </div>
+                <div id="saveStatus" class="status hidden"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add Tab Modal -->
+    <div class="add-tab-modal" id="addTabModal">
+        <div class="add-tab-modal-content">
+            <h3>Add New Settings Tab</h3>
+            
+            <div class="add-tab-options">
+                <label class="add-tab-option">
+                    <input type="radio" name="addTabType" value="copy" checked>
+                    <div class="add-tab-option-content">
+                        <h4>📋 Copy Current Tab</h4>
+                        <p>Create a copy of the current settings with all values</p>
+                    </div>
+                </label>
+                <label class="add-tab-option">
+                    <input type="radio" name="addTabType" value="load">
+                    <div class="add-tab-option-content">
+                        <h4>📁 Load Existing JSON</h4>
+                        <p>Load settings from an existing JSON file</p>
+                    </div>
+                </label>
+            </div>
+
+            <div class="add-tab-naming">
+                <label for="newTabName">Tab Name:</label>
+                <input type="text" id="newTabName" placeholder="Enter tab name..." required>
+            </div>
+
+            <div class="add-tab-actions">
+                <button class="btn btn-primary" id="confirmAddTab">Create Tab</button>
+                <button class="btn btn-secondary" id="cancelAddTab">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input Method Switch Warning Modal -->
+    <div class="modal-overlay" id="inputMethodWarningModal">
+        <div class="modal-content">
+            <h3>⚠️ Warning: Switch Input Method</h3>
+            <p>You currently have <span id="tabCount">0</span> tab(s) open with settings loaded. Switching the input method will close all current tabs and clear any unsaved changes.</p>
+            <p><strong>Are you sure you want to continue?</strong></p>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="confirmInputMethodSwitch">Yes, Switch Method</button>
+                <button class="btn btn-secondary" id="cancelInputMethodSwitch">No, Keep Current Method</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
