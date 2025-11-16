@@ -46,17 +46,31 @@ The Solution Settings Configurator simplifies the management of Dataverse soluti
 ### Prerequisites
 
 1. **Power Platform CLI**: Install the [Microsoft Power Platform CLI](https://learn.microsoft.com/en-us/power-platform/developer/howto/install-cli-msi) on your system
+
+The easiest way to begin is by downloading the **portable executable** from the project's release page.
+
+### 🔽 Download the Portable App (Recommended)
+
+1. Go to the **[Releases](https://github.com/ReggieAvalos/Solution-Settings-Configurator/releases)** section of this repository  
+2. Download the latest `Solution.Settings.Configurator.1.0.0.zip` file containing the portable application
+3. Extract the contents  
+4. Launch **Solution Settings Configurator.exe**
+
+No installation required — just download, extract, and run.
+
+---
+## 🛠️ Alternative: Build the Application Yourself
+
+If you prefer to run the project from source or contribute to development, you can build it locally.
+
+### Prerequisites
+
+1. **Power Platform CLI**: Install the [Microsoft Power Platform CLI](https://learn.microsoft.com/en-us/power-platform/developer/howto/install-cli-msi) on your system
 2. **Windows Operating System**: This application is designed for Windows environments
 3. **Node.js**: Required for development (if building from source)
 
-### Installation
+### Build & Run from Source
 
-#### Option 1: Download Pre-built Release
-1. Download the latest release from the releases section
-2. Extract the portable application
-3. Run `Solution Settings Configurator.exe`
-
-#### Option 2: Build from Source
 1. Clone this repository:
    ```bash
    git clone https://github.com/your-username/Solution-Settings-Configurator.git
@@ -225,9 +239,20 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-**Jose Regino Avalos Mancilla**
-- Specialized in Microsoft Power Platform solutions
-- Focus on streamlining deployment and configuration processes
+**Jose Regino Avalos Mancilla** - 🔗[Profile](https://www.linkedin.com/in/regino-avalos/)
+Solution Architect and Microsoft Power Platform Expert with 9+ years of experience designing, building, and deploying enterprise-grade business applications.
+
+My core areas of expertise include:
+
+- **Power Pages / PowerApps Portals**: End-to-end implementation, advanced customization with HTML/JS/CSS Specialized in jQuery and Bootstrap v3 and v5 for responsive design and Accessibility best practices. Azure AD B2C, Entra External ID, OpenID and SAML authentication processes, building secure self-service experiences for external users.
+- **PCF Control Development**: Creating custom Power Platform components to enhance model-driven apps with React framework. 
+- **Power Platform & Dataverse Architecture**: Solution design, data modeling, security configuration, automation patterns, and performance-optimized implementations.
+- **Dynamics 365 Extensions & Advanced Development**: Plug-ins, Custom Workflow Activities, Azure Functions, Web Jobs, and integration with enterprise services using C#, REST, and SOAP.
+- **ALM & DevOps for Power Platform**: Designing CI/CD pipelines, automating solution deployments, managing environment variables and connection references, and implementing best practices for enterprise ALM.
+- **Enterprise Integrations**: Power BI, Adobe Sign, Azure Storage, identity management, and custom API integrations.
+
+I am passionate about building clean, robust, and maintainable architecture that accelerates delivery, improves reliability, and elevates the overall quality of Power Platform solutions.
+
 
 ## 🤝 Support
 
