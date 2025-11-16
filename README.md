@@ -20,6 +20,8 @@ The Solution Settings Configurator simplifies the management of Dataverse soluti
 - **Multi-Tab Interface**: Work with multiple solution configurations simultaneously
 - **Smart Connection Grouping**: Group connections by connector type with conflict resolution
 - **Auto-Save Capabilities**: Save individual tabs or all configurations at once
+- **Merge**: Use existing setting files and merge them with the most recent settings generated from your solution (Perfect for those cases where your solution contains new environment variables or connection references) 
+
 
 ### 🔌 Connection Reference Management
 - **Individual Mode**: Configure each connection reference separately
