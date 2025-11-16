@@ -251,7 +251,7 @@ My core areas of expertise include:
 - **ALM & DevOps for Power Platform**: Designing CI/CD pipelines, automating solution deployments, managing environment variables and connection references, and implementing best practices for enterprise ALM.
 - **Enterprise Integrations**: Power BI, Adobe Sign, Azure Storage, identity management, and custom API integrations.
 
-I am passionate about building clean, robust, and maintainable architecture that accelerates delivery, improves reliability, and elevates the overall quality of Power Platform solutions.
+I am passionate about building clean, robust, and maintainable architecture that accelerates delivery, improves reliability, and elevates the overall quality of Power Platform solutions. 
 
 
 ## 🤝 Support
