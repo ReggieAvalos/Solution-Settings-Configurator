@@ -1109,10 +1109,7 @@ class SolutionConfigurator {
         }
 
         try {
-            const mergeFilePath = await window.electronAPI.openFileDialog({
-                title: 'Select JSON file to merge from',
-                filters: [{ name: 'JSON Files', extensions: ['json'] }]
-            });
+            const mergeFilePath = await window.electronAPI.selectJsonFile();
 
             if (!mergeFilePath) return; // User cancelled
 
