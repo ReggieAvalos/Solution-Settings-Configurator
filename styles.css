@@ -657,6 +657,63 @@ header p {
     margin-top: 25px;
 }
 
+/* Merge Results Modal */
+#mergeResultsModal {
+    display: none;
+}
+
+.merge-results h4 {
+    color: #0078d4;
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.merge-results p {
+    margin: 8px 0;
+    color: #323130;
+}
+
+.merge-results details {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f3f2f1;
+    border-radius: 4px;
+    border: 1px solid #edebe9;
+}
+
+.merge-results summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #0078d4;
+    padding: 5px;
+    user-select: none;
+}
+
+.merge-results summary:hover {
+    color: #106ebe;
+}
+
+.merge-results ul {
+    list-style: none;
+    padding: 10px 0 0 10px;
+    margin: 0;
+}
+
+.merge-results li {
+    padding: 4px 0;
+    color: #605e5c;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 13px;
+}
+
+.merge-results li:before {
+    content: '→ ';
+    color: #0078d4;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
 /* Enhanced responsive design */
 @media (max-width: 768px) {
     .powerbi-container {

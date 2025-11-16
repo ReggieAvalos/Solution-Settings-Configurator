@@ -87,6 +87,7 @@
                 <div class="actions">
                     <button id="saveBtn" class="btn btn-success">Save Current Tab</button>
                     <button id="saveAllBtn" class="btn btn-success">Save All Tabs</button>
+                    <button id="mergeBtn" class="btn btn-primary">Merge from JSON</button>
                     <button id="resetBtn" class="btn btn-secondary">Reset Current Tab</button>
                 </div>
                 <div id="saveStatus" class="status hidden"></div>
@@ -137,6 +138,17 @@
             <div class="modal-actions">
                 <button class="btn btn-primary" id="confirmInputMethodSwitch">Yes, Switch Method</button>
                 <button class="btn btn-secondary" id="cancelInputMethodSwitch">No, Keep Current Method</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Merge Results Modal -->
+    <div class="modal-overlay" id="mergeResultsModal">
+        <div class="modal-content">
+            <h3>✅ Merge Complete</h3>
+            <div id="mergeResultsContent"></div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="closeMergeResults">Close</button>
             </div>
         </div>
     </div>

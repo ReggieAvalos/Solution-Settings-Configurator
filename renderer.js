@@ -34,6 +34,10 @@ class SolutionConfigurator {
         document.getElementById('saveBtn').addEventListener('click', this.saveCurrentTab.bind(this));
         document.getElementById('saveAllBtn').addEventListener('click', this.saveAllTabs.bind(this));
         document.getElementById('resetBtn').addEventListener('click', this.resetCurrentTab.bind(this));
+
+        // Merge functionality
+        document.getElementById('mergeBtn').addEventListener('click', this.mergeSettings.bind(this));
+        document.getElementById('closeMergeResults').addEventListener('click', this.closeMergeResultsModal.bind(this));
     }
 
     switchMode(mode) {
@@ -556,6 +560,12 @@ class SolutionConfigurator {
         }
     }
 
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
     renderEnvironmentVariables(tabId) {
         const tabData = this.tabs.get(tabId);
         if (!tabData) return;
@@ -686,7 +696,7 @@ class SolutionConfigurator {
                     </div>
                 </div>
             </div>
-            <input type="hidden" id="env_${tabId}_${index}" data-index="${index}" data-type="powerbi" data-tab="${tabId}">
+            <input type="hidden" id="env_${tabId}_${index}" data-index="${index}" data-type="powerbi" data-tab="${tabId}" value="${this.escapeHtml(JSON.stringify(currentPBI))}">
             ${envVar.Description ? `<p class="description">${envVar.Description}</p>` : ''}
         `;
 
@@ -699,6 +709,8 @@ class SolutionConfigurator {
                     this.markTabAsChanged(tabId);
                 });
             });
+            // Initialize the hidden input value to ensure it's in sync
+            this.updatePowerBIValue(tabId, index);
         }, 0);
 
         return div;
@@ -1079,7 +1091,7 @@ class SolutionConfigurator {
             this.showError('No active tab to reset.');
             return;
         }
-        
+
         if (confirm('Are you sure you want to reset all changes in the current tab?')) {
             this.renderTabSettings(this.activeTabId);
             const tabData = this.tabs.get(this.activeTabId);
@@ -1089,7 +1101,137 @@ class SolutionConfigurator {
             }
         }
     }
-    
+
+    async mergeSettings() {
+        if (!this.activeTabId) {
+            this.showError('No active tab to merge into.');
+            return;
+        }
+
+        try {
+            const mergeFilePath = await window.electronAPI.openFileDialog({
+                title: 'Select JSON file to merge from',
+                filters: [{ name: 'JSON Files', extensions: ['json'] }]
+            });
+
+            if (!mergeFilePath) return; // User cancelled
+
+            const mergeData = await window.electronAPI.readSettingsFile(mergeFilePath);
+            if (!mergeData) {
+                this.showError('Failed to read merge file.');
+                return;
+            }
+
+            // Perform the merge
+            const results = this.performMerge(this.activeTabId, mergeData);
+
+            // Re-render the tab to show merged values
+            this.renderTabSettings(this.activeTabId);
+
+            // Mark tab as changed
+            this.markTabAsChanged(this.activeTabId);
+
+            // Show merge results
+            this.showMergeResults(results);
+
+        } catch (error) {
+            this.showError(`Failed to merge settings: ${error.message}`);
+        }
+    }
+
+    performMerge(tabId, mergeData) {
+        const tabData = this.tabs.get(tabId);
+        if (!tabData) return null;
+
+        const results = {
+            envVarsMatched: 0,
+            envVarsTotal: 0,
+            connRefsMatched: 0,
+            connRefsTotal: 0,
+            matchedEnvVars: [],
+            matchedConnRefs: []
+        };
+
+        // Merge Environment Variables
+        if (tabData.settingsData.EnvironmentVariables && mergeData.EnvironmentVariables) {
+            results.envVarsTotal = tabData.settingsData.EnvironmentVariables.length;
+
+            tabData.settingsData.EnvironmentVariables.forEach(envVar => {
+                const match = mergeData.EnvironmentVariables.find(
+                    mergeVar => mergeVar.SchemaName === envVar.SchemaName
+                );
+
+                if (match && match.Value) {
+                    envVar.Value = match.Value;
+                    results.envVarsMatched++;
+                    results.matchedEnvVars.push(envVar.SchemaName);
+                }
+            });
+        }
+
+        // Merge Connection References
+        if (tabData.settingsData.ConnectionReferences && mergeData.ConnectionReferences) {
+            results.connRefsTotal = tabData.settingsData.ConnectionReferences.length;
+
+            tabData.settingsData.ConnectionReferences.forEach(connRef => {
+                const match = mergeData.ConnectionReferences.find(
+                    mergeRef => mergeRef.LogicalName === connRef.LogicalName
+                );
+
+                if (match && match.ConnectionId) {
+                    connRef.ConnectionId = match.ConnectionId;
+                    results.connRefsMatched++;
+                    results.matchedConnRefs.push(connRef.LogicalName);
+                }
+            });
+        }
+
+        return results;
+    }
+
+    showMergeResults(results) {
+        const modal = document.getElementById('mergeResultsModal');
+        const content = document.getElementById('mergeResultsContent');
+
+        const envVarsUnmatched = results.envVarsTotal - results.envVarsMatched;
+        const connRefsUnmatched = results.connRefsTotal - results.connRefsMatched;
+
+        content.innerHTML = `
+            <div class="merge-results">
+                <h4>Environment Variables</h4>
+                <p>✅ Matched and merged: <strong>${results.envVarsMatched}</strong> of ${results.envVarsTotal}</p>
+                ${envVarsUnmatched > 0 ? `<p>⚠️ Not matched (left blank): <strong>${envVarsUnmatched}</strong></p>` : ''}
+                ${results.matchedEnvVars.length > 0 ? `
+                    <details>
+                        <summary>Show matched variables</summary>
+                        <ul>
+                            ${results.matchedEnvVars.map(name => `<li>${name}</li>`).join('')}
+                        </ul>
+                    </details>
+                ` : ''}
+
+                <h4 style="margin-top: 20px;">Connection References</h4>
+                <p>✅ Matched and merged: <strong>${results.connRefsMatched}</strong> of ${results.connRefsTotal}</p>
+                ${connRefsUnmatched > 0 ? `<p>⚠️ Not matched (left blank): <strong>${connRefsUnmatched}</strong></p>` : ''}
+                ${results.matchedConnRefs.length > 0 ? `
+                    <details>
+                        <summary>Show matched references</summary>
+                        <ul>
+                            ${results.matchedConnRefs.map(name => `<li>${name}</li>`).join('')}
+                        </ul>
+                    </details>
+                ` : ''}
+            </div>
+        `;
+
+        modal.style.display = 'flex';
+    }
+
+    closeMergeResultsModal() {
+        const modal = document.getElementById('mergeResultsModal');
+        modal.style.display = 'none';
+    }
+
     markTabAsChanged(tabId) {
         const tabData = this.tabs.get(tabId);
         if (!tabData) return;
